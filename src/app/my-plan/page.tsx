@@ -54,9 +54,6 @@ const MyPlanPage = () => {
     <main className="mx-auto min-h-[70vh] max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
         <div>
-          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-[#CCFF00]">
-            YOUR TRAINING LOG
-          </p>
           <h1 className="font-oswald text-4xl font-bold uppercase text-white sm:text-5xl">
             MY PLAN
           </h1>
@@ -64,13 +61,6 @@ const MyPlanPage = () => {
             Cap of five lifts for today. Finish them, then load more.
           </p>
         </div>
-        <Link
-          href="/workouts#library"
-          className="inline-flex items-center justify-center gap-2 self-start rounded-full bg-[#CCFF00] px-5 py-3 text-sm font-bold text-black transition hover:bg-[#b8e600] sm:self-auto"
-        >
-          Browse workouts
-          <FiArrowRight />
-        </Link>
       </div>
       <section className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[
