@@ -10,7 +10,6 @@ const WorkOut = ({ card }: { card: IWork }) => {
       href={`/workouts/${card.id}`}
       className="group block overflow-hidden rounded-2xl border border-white/10 bg-[#12141A] text-white transition duration-300 hover:-translate-y-1 hover:border-[#CCFF00]/50"
     >
-      {/* Image */}
       <div  className="relative h-52 w-full overflow-hidden bg-[#0B0D10]">
         <Image
           src={card.image}
@@ -19,10 +18,7 @@ const WorkOut = ({ card }: { card: IWork }) => {
           className="object-contain transition duration-300"
         />
       </div>
-
-      {/* Content */}
       <div className="p-5">
-        {/* Muscle Groups */}
         <div className="mb-3 flex flex-wrap gap-2">
           {card.muscleGroups.map((group) => (
             <span
@@ -33,29 +29,20 @@ const WorkOut = ({ card }: { card: IWork }) => {
             </span>
           ))}
         </div>
-
-        {/* Name */}
         <h2 className="mb-2 text-xl font-black uppercase tracking-wide text-white">
           {card.name}
         </h2>
-
-        {/* Equipment */}
         <p className="text-sm text-gray-400">{card.equipment}</p>
-
         <div className="my-4 border-t border-white/10" />
-
-        {/* Stats */}
         <div className="flex items-center justify-between text-xs text-gray-300">
           <div className="flex items-center gap-1.5">
             <FiClock className="text-gray-400" />
             <span>{card.duration} min</span>
           </div>
-
           <div className="flex items-center gap-1.5">
             <FaFireFlameCurved className="text-gray-400" />
             <span>{card.caloriesBurned} kcal</span>
           </div>
-
           <div className="flex items-center gap-1.5">
             <FiStar className="text-gray-400" />
             <span>{card.rating}</span>
@@ -65,5 +52,4 @@ const WorkOut = ({ card }: { card: IWork }) => {
     </Link>
   );
 };
-
 export default WorkOut;
