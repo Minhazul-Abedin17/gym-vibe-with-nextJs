@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -38,41 +39,9 @@ export const WorkoutProvider = ({
   const [saved, setSaved] = useState<IWork[]>([]);
   const [doneIds, setDoneIds] = useState<number[]>([]);
   const [toast, setToast] = useState<string | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved data after the component mounts
-  useEffect(() => {
-    try {
-      const storedPlan = localStorage.getItem("fitlog-plan");
-      const storedSaved = localStorage.getItem("fitlog-saved");
-      const storedDone = localStorage.getItem("fitlog-done");
-
-      if (storedPlan) {
-        setPlan(JSON.parse(storedPlan));
-      }
-
-      if (storedSaved) {
-        setSaved(JSON.parse(storedSaved));
-      }
-
-      if (storedDone) {
-        setDoneIds(JSON.parse(storedDone));
-      }
-    } catch (error) {
-      console.error("Failed to load FitLog data:", error);
-    } finally {
-      setIsLoaded(true);
-    }
-  }, []);
-
-  // Persist data whenever it changes
-  useEffect(() => {
-    if (!isLoaded) return;
-
-    localStorage.setItem("fitlog-plan", JSON.stringify(plan));
-    localStorage.setItem("fitlog-saved", JSON.stringify(saved));
-    localStorage.setItem("fitlog-done", JSON.stringify(doneIds));
-  }, [plan, saved, doneIds, isLoaded]);
+  // Keep this so MyPlanPage can still use isLoaded
+  const [isLoaded, setIsLoaded] = useState(true);
 
   // Automatically hide toast
   useEffect(() => {
@@ -102,6 +71,7 @@ export const WorkoutProvider = ({
     }
 
     setPlan((prev) => [...prev, workout]);
+
     showToast("Added to today's plan");
 
     return true;
@@ -115,6 +85,7 @@ export const WorkoutProvider = ({
     }
 
     setSaved((prev) => [...prev, workout]);
+
     showToast("Workout saved for later");
 
     return true;
@@ -122,16 +93,22 @@ export const WorkoutProvider = ({
 
   // Remove workout from today's plan
   const removeFromPlan = (id: number) => {
-    setPlan((prev) => prev.filter((item) => item.id !== id));
+    setPlan((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
 
-    setDoneIds((prev) => prev.filter((itemId) => itemId !== id));
+    setDoneIds((prev) =>
+      prev.filter((itemId) => itemId !== id)
+    );
 
     showToast("Workout removed from today's plan");
   };
 
   // Remove workout from saved list
   const removeFromSaved = (id: number) => {
-    setSaved((prev) => prev.filter((item) => item.id !== id));
+    setSaved((prev) =>
+      prev.filter((item) => item.id !== id)
+    );
 
     showToast("Workout removed from saved");
   };
@@ -144,6 +121,7 @@ export const WorkoutProvider = ({
     }
 
     setDoneIds((prev) => [...prev, id]);
+
     showToast("Workout marked as done!");
   };
 
