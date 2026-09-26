@@ -10,7 +10,15 @@ type Tab = "plan" | "saved";
 type SortOption = "duration" | "calories" | "rating";
 
 const MyPlanPage = () => {
-  const {plan,saved,doneIds,isLoaded,markAsDone,removeFromPlan,removeFromSaved,} = useWorkout();
+  const {
+    plan,
+    saved,
+    doneIds,
+    isLoaded,
+    markAsDone,
+    removeFromPlan,
+    removeFromSaved,
+  } = useWorkout();
   const [activeTab, setActiveTab] = useState<Tab>("plan");
   const [sortBy, setSortBy] = useState<SortOption>("duration");
   const currentList = activeTab === "plan" ? plan : saved;
