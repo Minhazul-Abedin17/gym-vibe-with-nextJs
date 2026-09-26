@@ -1,88 +1,68 @@
-
 "use client";
-
 import { useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import WorkOut from "../components/shared/WorkOut";
 import { IWork } from "../workout-type";
 
 const API_URL = "https://api.abcz.workers.dev/api/fitlog";
-
 const WorkoutsPage = () => {
   const [workouts, setWorkouts] = useState<IWork[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   useEffect(() => {
-    const controller = new AbortController();
-
     const fetchWorkouts = async () => {
       try {
         setLoading(true);
         setError("");
 
         const response = await fetch(API_URL, {
-          signal: controller.signal,
+          method: "GET",
+          mode: "cors",
+          cache: "no-store",
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch workouts");
+          throw new Error(`Failed to fetch workouts: ${response.status}`);
         }
-
-        const data: IWork[] = await response.json();
+        const result = await response.json();
+        console.log("API response:", result);
+        const data = result.workouts ?? result.data ?? result;
+        if (!Array.isArray(data)) {
+          throw new Error("Invalid workout data");
+        }
         setWorkouts(data);
       } catch (err) {
-        if (err instanceof Error && err.name === "AbortError") {
-          return;
-        }
-
-        console.error("Workout API error:", err);
-        setError("Unable to load workouts. Please try again.");
+        console.error("Workouts fetch error:", err);
+        setError("Failed to load workouts. Please try again.");
       } finally {
-        if (!controller.signal.aborted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
-
     fetchWorkouts();
-
-    return () => controller.abort();
   }, []);
-
   return (
     <main>
       <Banner />
-
       <section
         id="library"
         className="mx-auto max-w-7xl scroll-mt-24 px-4 py-10 sm:px-6 lg:px-8"
       >
         {/* Heading */}
         <div className="mb-8">
-          <p className="mb-2 text-xs font-bold tracking-[0.2em] text-[#CCFF00]">
-            FIND YOUR NEXT LIFT
-          </p>
-
           <h2 className="font-oswald text-4xl font-bold uppercase text-white">
             THE LIBRARY
           </h2>
-
           <p className="mt-2 text-sm text-gray-400">
             Twelve lifts covering every major muscle group.
           </p>
         </div>
-
         {/* Loading */}
         {loading && (
           <div className="flex min-h-60 flex-col items-center justify-center gap-4">
             <span className="loading loading-spinner loading-lg text-[#CCFF00]" />
-            <p className="text-sm text-gray-400">
-              Loading workouts…
-            </p>
+            <p className="text-sm text-gray-400">Loading workouts…</p>
           </div>
         )}
-
         {/* Error */}
         {!loading && error && (
           <div className="rounded-2xl border border-red-500/30 p-8 text-center">
@@ -96,7 +76,6 @@ const WorkoutsPage = () => {
             </button>
           </div>
         )}
-
         {/* Workout Cards */}
         {!loading && !error && workouts.length > 0 && (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -105,16 +84,14 @@ const WorkoutsPage = () => {
             ))}
           </div>
         )}
-
-        {/* Empty State */}
+        {/* No workouts */}
         {!loading && !error && workouts.length === 0 && (
           <div className="rounded-2xl border border-dashed border-white/15 px-5 py-16 text-center">
             <h3 className="font-oswald text-2xl font-bold text-white">
-              NO WORKOUTS AVAILABLE
+              NO WORKOUTS FOUND
             </h3>
-
             <p className="mt-3 text-sm text-gray-500">
-              No workouts are available right now.
+              There are no workouts available right now.
             </p>
           </div>
         )}
@@ -122,5 +99,4 @@ const WorkoutsPage = () => {
     </main>
   );
 };
-
 export default WorkoutsPage;
