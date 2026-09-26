@@ -13,8 +13,7 @@ const WorkoutsPage = () => {
     const fetchWorkouts = async () => {
       try {
         setLoading(true);
-        setError("");
-
+        setError("")
         const response = await fetch(API_URL, {
           method: "GET",
           mode: "cors",
